@@ -11,20 +11,27 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-      - name: kratos-migration
-        image: oryd/kratos:v0.10.1
-        command: ["kratos", "-c", "/etc/config/kratos/kratos.yml", "migrate", "sql", "-e", "--yes"]
-        imagePullPolicy: IfNotPresent
-        envFrom: 
-          - secretRef:
-              name: kratos-env
-        volumeMounts:
-          - name: kratos-identity-schema
-            mountPath: /etc/config/kratos/identity.schema.json
-            subPath: identity.schema.json
-          - name: kratos-config
-            mountPath: /etc/config/kratos/kratos.yml
-            subPath: kratos.yml
+        - name: kratos-migration
+          image: oryd/kratos:v0.10.1
+          command:
+            - kratos
+            - "-c"
+            - "/etc/config/kratos/kratos.yml"
+            - "migrate"
+            - "sql"
+            - "-e"
+            - "--yes"
+          imagePullPolicy: IfNotPresent
+          envFrom: 
+            - secretRef:
+                name: kratos-env
+          volumeMounts:
+            - name: kratos-identity-schema
+              mountPath: /etc/config/kratos/identity.schema.json
+              subPath: identity.schema.json
+            - name: kratos-config
+              mountPath: /etc/config/kratos/kratos.yml
+              subPath: kratos.yml
       volumes:
         - name: kratos-identity-schema
           configMap:
